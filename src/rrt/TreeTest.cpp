@@ -47,7 +47,7 @@ TEST(Tree, getPath) {
     Tree<Vector2f>* tree =
         TreeFor2dPlane(make_shared<GridStateSpace>(50, 50, 50, 50),
                        goal,  //	goal point
-                       5);                //	step size
+                       5);    //	step size
 
     //	give it plenty of iterations so it's not likely to fail
     const int maxIterations = 10000;

@@ -1,15 +1,15 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdlib.h>
 #include <functional>
+#include <iostream>
 #include <iostream>
 #include <list>
 #include <memory>
 #include <rrt/StateSpace.hpp>
 #include <stdexcept>
 #include <vector>
-#include <stdlib.h>
-#include <iostream>
 
 namespace RRT {
 /**
@@ -327,8 +327,8 @@ public:
      * @param reverse if true, the states will be sent from @dest to the
      *                tree's root
      */
-    void getPath(std::function<void(const T& stateI)> callback, const Node<T>* dest,
-                 bool reverse = false) const {
+    void getPath(std::function<void(const T& stateI)> callback,
+                 const Node<T>* dest, bool reverse = false) const {
         const Node<T>* node = dest;
         if (reverse) {
             while (node) {
