@@ -22,8 +22,7 @@ TEST(BiRRT, getPath) {
     bool success = biRRT.run();
     ASSERT_TRUE(success);
 
-    vector<Eigen::Vector2f> path;
-    biRRT.getPath(path);
+    vector<Eigen::Vector2f> path = biRRT.getPath();
 
     // path should contain at least two points (start and end)
     ASSERT_GE(path.size(), 2);
