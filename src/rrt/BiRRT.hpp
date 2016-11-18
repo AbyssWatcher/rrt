@@ -85,8 +85,8 @@ public:
      */
     std::vector<T> getPath() {
         std::vector<T> vecOut;
-        _startTree.getPath(vecOut, _startSolutionNode);
-        _startTree.getPath(vecOut, _goalSolutionNode, true);
+        _startTree.getPath(&vecOut, _startSolutionNode);
+        _startTree.getPath(&vecOut, _goalSolutionNode, true);
         return vecOut;
     }
 

@@ -327,8 +327,8 @@ public:
      * @param reverse if true, the states will be sent from @dest to the
      *                tree's root
      */
-    void getPath(std::function<void(const T& stateI)> callback, Node<T>* dest,
-                 const bool reverse = false) {
+    void getPath(std::function<void(const T& stateI)> callback, const Node<T>* dest,
+                 bool reverse = false) const {
         const Node<T>* node = dest;
         if (reverse) {
             while (node) {
@@ -355,9 +355,9 @@ public:
      * @param reverse if true, the states will be sent from @dest to the
      *                tree's root
      */
-    void getPath(std::vector<T>& vectorOut, Node<T>* dest,
-                 const bool reverse = false) {
-        getPath([&](const T& stateI) { vectorOut.push_back(stateI); }, dest,
+    void getPath(std::vector<T>* vectorOut, const Node<T>* dest,
+                 bool reverse = false) const {
+        getPath([&](const T& stateI) { vectorOut->push_back(stateI); }, dest,
                 reverse);
     }
 

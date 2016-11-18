@@ -42,10 +42,11 @@ TEST(Tree, FailOnImpossibleRequest) {
                             // reachable
 }
 
-TEST(Tree, GetPath) {
+TEST(Tree, getPath) {
+    Vector2f start = {10, 10}, goal = {40, 40};
     Tree<Vector2f>* tree =
         TreeFor2dPlane(make_shared<GridStateSpace>(50, 50, 50, 50),
-                       Vector2f(40, 40),  //	goal point
+                       goal,  //	goal point
                        5);                //	step size
 
     //	give it plenty of iterations so it's not likely to fail
@@ -53,19 +54,23 @@ TEST(Tree, GetPath) {
     tree->setMaxIterations(maxIterations);
     tree->setGoalMaxDist(5);
 
-    tree->setStartState(Vector2f(10, 10));
+    tree->setStartState(start);
     bool success = tree->run();  //	run with the given starting point
     ASSERT_TRUE(success);
 
     //	get path in reverse order (end -> root)
     vector<Vector2f> path;
-    tree->getPath(path, tree->lastNode(), true);
+    tree->getPath(&path, tree->lastNode(), true);
     ASSERT_TRUE(path.size() > 1);
+    ASSERT_EQ(goal, path.front());
+    ASSERT_EQ(start, path.back());
 
     //	get path in regular order (root -> end)
     path.clear();
-    tree->getPath(path, tree->lastNode(), false);
+    tree->getPath(&path, tree->lastNode(), false);
     ASSERT_TRUE(path.size() > 1);
+    ASSERT_EQ(start, path.front());
+    ASSERT_EQ(goal, path.back());
 }
 
 TEST(Tree, ASC) {
@@ -87,7 +92,7 @@ TEST(Tree, ASC) {
     ASSERT_TRUE(success);
 
     vector<Vector2f> path;
-    tree->getPath(path, tree->lastNode(), true);
+    tree->getPath(&path, tree->lastNode(), true);
 
     // Check to see if the nodes in the tree have uniform stepsize or varied.
     // Stepsizes should vary
