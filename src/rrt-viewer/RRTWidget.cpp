@@ -117,7 +117,7 @@ void RRTWidget::step(int numTimes) {
     //  store solution
     _previousSolution.clear();
     if (_biRRT->startSolutionNode() != nullptr) {
-        _biRRT->getPath(_previousSolution);
+        _previousSolution = _biRRT->getPath();
         RRT::SmoothPath<Vector2f>(_previousSolution, *_stateSpace);
     }
 
@@ -190,9 +190,9 @@ void RRTWidget::paintEvent(QPaintEvent* p) {
                 Vector2f nextWaypoint = _previousSolution[i + 1];
                 controlLength = 0.5 * min((waypoint - prevWaypoint).norm(),
                                           (nextWaypoint - waypoint).norm());
-                controlDir =
-                    ((prevWaypoint - waypoint).normalized() -
-                     (nextWaypoint - waypoint).normalized()).normalized();
+                controlDir = ((prevWaypoint - waypoint).normalized() -
+                              (nextWaypoint - waypoint).normalized())
+                                 .normalized();
             }
 
             Vector2f controlDiff = controlDir * controlLength;
@@ -276,8 +276,8 @@ void RRTWidget::drawTree(QPainter& painter, const Tree<Vector2f>& rrt,
     if (solutionNode) {
         painter.setPen(QPen(solutionColor, 2));
 
-        const Node<Vector2f>* node = solutionNode,
-                              * parent = solutionNode->parent();
+        const Node<Vector2f> *node = solutionNode,
+                             *parent = solutionNode->parent();
         while (parent) {
             //  draw the edge
             QPointF from = pointFromNode(node);
