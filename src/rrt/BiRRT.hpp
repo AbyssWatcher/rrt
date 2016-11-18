@@ -179,6 +179,6 @@ private:
     int _iterationCount;
 
     int _solutionLength;
-    Node<T> *_startSolutionNode, *_goalSolutionNode;
+    Node<T>* _startSolutionNode, *_goalSolutionNode;
 };
 };
