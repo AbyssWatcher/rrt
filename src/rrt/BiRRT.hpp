@@ -80,8 +80,6 @@ public:
 
     /**
      * @brief Get the shortest path from the start to the goal
-     *
-     * @param vecOut The vector to place the solution in
      */
     std::vector<T> getPath() {
         std::vector<T> vecOut;
