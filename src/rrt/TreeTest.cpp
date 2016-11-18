@@ -62,15 +62,13 @@ TEST(Tree, getPath) {
     vector<Vector2f> path;
     tree->getPath(&path, tree->lastNode(), true);
     ASSERT_TRUE(path.size() > 1);
-    ASSERT_EQ(goal, path.front());
-    ASSERT_EQ(start, path.back());
+    EXPECT_EQ(start, path.back());
 
     //	get path in regular order (root -> end)
     path.clear();
     tree->getPath(&path, tree->lastNode(), false);
     ASSERT_TRUE(path.size() > 1);
-    ASSERT_EQ(start, path.front());
-    ASSERT_EQ(goal, path.back());
+    EXPECT_EQ(start, path.front());
 }
 
 TEST(Tree, ASC) {
