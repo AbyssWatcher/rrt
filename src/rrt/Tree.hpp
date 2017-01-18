@@ -1,15 +1,15 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdlib.h>
 #include <functional>
+#include <iostream>
 #include <iostream>
 #include <list>
 #include <memory>
 #include <rrt/StateSpace.hpp>
 #include <stdexcept>
 #include <vector>
-#include <stdlib.h>
-#include <iostream>
 
 namespace RRT {
 /**
@@ -112,6 +112,7 @@ public:
         setStepSize(0.1);
         setMaxStepSize(5);
         setMaxIterations(1000);
+        setMinIterations(0);
         setASCEnabled(false);
         setGoalBias(0);
         setWaypointBias(0);
@@ -129,6 +130,16 @@ public:
      */
     int maxIterations() const { return _maxIterations; }
     void setMaxIterations(int itr) { _maxIterations = itr; }
+
+    /**
+     * The minimum number of iterations to run.
+     *
+     * At the default value of zero, the rrt will return the first path it
+     * finds. Setting this to a higher value can allow the tree to search for
+     * longer in order to find a better path.
+     */
+    int minIterations() const { return _minIterations; }
+    void setMinIterations(int itr) { _minIterations = itr; }
 
     /**
      * Whether or not the tree is to run with adaptive stepsize control.
@@ -209,7 +220,8 @@ public:
 
             if (newNode &&
                 _stateSpace->distance(newNode->state(), _goalState) <
-                    _goalMaxDist)
+                    _goalMaxDist &&
+                i >= _minIterations)
                 return true;
         }
 
@@ -416,6 +428,7 @@ protected:
     T _goalState;
 
     int _maxIterations;
+    int _minIterations;
 
     bool _isASCEnabled;
 

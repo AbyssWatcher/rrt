@@ -52,6 +52,12 @@ public:
         _goalTree.setMaxIterations(itr);
     }
 
+    int minIterations() const { return _startTree.minIterations(); }
+    void setMinIterations(int itr) {
+        _startTree.setMinIterations(itr);
+        _goalTree.setMinIterations(itr);
+    }
+
     float waypointBias() const { return _startTree.waypointBias(); }
     void setWaypointBias(float waypointBias) {
         _startTree.setWaypointBias(waypointBias);
@@ -133,7 +139,9 @@ public:
     bool run() {
         for (int i = 0; i < _startTree.maxIterations(); i++) {
             grow();
-            if (_startSolutionNode != nullptr) return true;
+            if (_startSolutionNode != nullptr &&
+                i >= _startTree.minIterations())
+                return true;
         }
         return false;
     }
