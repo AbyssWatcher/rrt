@@ -13,7 +13,7 @@ const float VelocityDrawingMultiplier = 12;
 RRTWidget::RRTWidget() {
     _stateSpace = make_shared<GridStateSpace>(800, 600, 40, 30);
     _biRRT = new BiRRT<Vector2f>(_stateSpace);
-    setFixedSize(800, 600);
+    // setSize(800, 600); // TODO
 
     _waypointCacheMaxSize = 15;
 
@@ -28,16 +28,15 @@ RRTWidget::RRTWidget() {
     _goalVel = Vector2f(0, 1);
 
     //  register for mouse events
-    setMouseTracking(true);
+    // setMouseTracking(true);
 
     _draggingItem = DraggingNone;
     _editingObstacles = false;
-    
 
     _runTimer = nullptr;
 }
 
-void RRTWidget::slot_reset() {
+void RRTWidget::reset() {
     //  store waypoint cache
     vector<Vector2f> waypoints;
     if (_biRRT->startSolutionNode() && _biRRT->goalSolutionNode()) {
@@ -63,31 +62,29 @@ void RRTWidget::slot_reset() {
     update();
 }
 
-void RRTWidget::slot_clearObstacles() {
+void RRTWidget::clearObstacles() {
     _stateSpace->obstacleGrid().clear();
 
     update();
 }
 
-void RRTWidget::slot_setGoalBias(int bias) {
+void RRTWidget::setGoalBias(int bias) {
     _biRRT->setGoalBias((float)bias / 100.0f);
 }
 
-void RRTWidget::slot_setWaypointBias(int bias) {
+void RRTWidget::setWaypointBias(int bias) {
     _biRRT->setWaypointBias((float)bias / 100.0f);
 }
 
-void RRTWidget::slot_setASC(int checked) {
-    _biRRT->setASCEnabled(checked != 0);
-}
+void RRTWidget::setASC(int checked) { _biRRT->setASCEnabled(checked != 0); }
 
-void RRTWidget::slot_step() { step(1); }
+void RRTWidget::step() { _step(1); }
 
-void RRTWidget::slot_stepBig() { step(100); }
+void RRTWidget::stepBig() { _step(100); }
 
-void RRTWidget::slot_setStepSize(double step) { _biRRT->setStepSize(step); }
+void RRTWidget::setStepSize(double step) { _biRRT->setStepSize(step); }
 
-void RRTWidget::slot_run() {
+void RRTWidget::run() {
     if (!_runTimer) {
         _runTimer = new QTimer(this);
         connect(_runTimer, SIGNAL(timeout()), this, SLOT(run_step()));
@@ -95,7 +92,7 @@ void RRTWidget::slot_run() {
     }
 }
 
-void RRTWidget::slot_stop() {
+void RRTWidget::stop() {
     if (_runTimer) {
         delete _runTimer;
         _runTimer = nullptr;
@@ -104,14 +101,14 @@ void RRTWidget::slot_stop() {
 
 void RRTWidget::run_step() {
     if (_biRRT->startSolutionNode() == nullptr) {
-        step(1);
+        _step(1);
     } else {
         delete _runTimer;
         _runTimer = nullptr;
     }
 }
 
-void RRTWidget::step(int numTimes) {
+void RRTWidget::_step(int numTimes) {
     for (int i = 0; i < numTimes; i++) {
         _biRRT->grow();
     }
@@ -134,17 +131,17 @@ QPointF RRTWidget::pointFromNode(const Node<Vector2f>* n) {
 
 QPointF vecToPoint(const Vector2f& vec) { return QPointF(vec.x(), vec.y()); }
 
-void RRTWidget::paintEvent(QPaintEvent* p) {
-    QPainter painter(this);
+void RRTWidget::paint(QPainter* p) {
+    QPainter& painter = *p;  // TODO: just use the pointer everywhere?
 
     //  draw black border around widget
     painter.setPen(QPen(Qt::black, 3));
-    painter.drawRect(rect());
+    QRectF rect(0, 0, width(), height());
+    painter.drawRect(rect);
 
     //  draw obstacles
-    int rectW = rect().width() / _stateSpace->obstacleGrid().discretizedWidth(),
-        rectH =
-            rect().height() / _stateSpace->obstacleGrid().discretizedHeight();
+    int rectW = width() / _stateSpace->obstacleGrid().discretizedWidth(),
+        rectH = height() / _stateSpace->obstacleGrid().discretizedHeight();
     painter.setPen(QPen(Qt::black, 2));
     for (int x = 0; x < _stateSpace->obstacleGrid().discretizedWidth(); x++) {
         for (int y = 0; y < _stateSpace->obstacleGrid().discretizedHeight();
@@ -192,9 +189,9 @@ void RRTWidget::paintEvent(QPaintEvent* p) {
                 Vector2f nextWaypoint = _previousSolution[i + 1];
                 controlLength = 0.5 * min((waypoint - prevWaypoint).norm(),
                                           (nextWaypoint - waypoint).norm());
-                controlDir =
-                    ((prevWaypoint - waypoint).normalized() -
-                     (nextWaypoint - waypoint).normalized()).normalized();
+                controlDir = ((prevWaypoint - waypoint).normalized() -
+                              (nextWaypoint - waypoint).normalized())
+                                 .normalized();
             }
 
             Vector2f controlDiff = controlDir * controlLength;
@@ -278,8 +275,8 @@ void RRTWidget::drawTree(QPainter& painter, const Tree<Vector2f>& rrt,
     if (solutionNode) {
         painter.setPen(QPen(solutionColor, 2));
 
-        const Node<Vector2f>* node = solutionNode,
-                              * parent = solutionNode->parent();
+        const Node<Vector2f> *node = solutionNode,
+                             *parent = solutionNode->parent();
         while (parent) {
             //  draw the edge
             QPointF from = pointFromNode(node);

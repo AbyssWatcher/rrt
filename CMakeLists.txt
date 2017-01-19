@@ -80,7 +80,6 @@ install(TARGETS RRT DESTINATION "lib")
 
 set(ui_SRC
     "src/rrt-viewer/main.cpp"
-    "src/rrt-viewer/MainWindow.cpp"
     "src/rrt-viewer/RRTWidget.cpp"
 )
 
