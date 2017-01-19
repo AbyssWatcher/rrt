@@ -57,7 +57,7 @@ void RRTWidget::reset() {
 
     _biRRT->setWaypoints(waypoints);
 
-    emit signal_stepped(0);
+    emit signal_stepped();
 
     update();
 }
@@ -68,13 +68,9 @@ void RRTWidget::clearObstacles() {
     update();
 }
 
-void RRTWidget::setGoalBias(int bias) {
-    _biRRT->setGoalBias((float)bias / 100.0f);
-}
+void RRTWidget::setGoalBias(float bias) { _biRRT->setGoalBias(bias); }
 
-void RRTWidget::setWaypointBias(int bias) {
-    _biRRT->setWaypointBias((float)bias / 100.0f);
-}
+void RRTWidget::setWaypointBias(float bias) { _biRRT->setWaypointBias(bias); }
 
 void RRTWidget::setASC(int checked) { _biRRT->setASCEnabled(checked != 0); }
 
@@ -120,7 +116,7 @@ void RRTWidget::_step(int numTimes) {
         RRT::SmoothPath<Vector2f>(_previousSolution, *_stateSpace);
     }
 
-    emit signal_stepped(_biRRT->iterationCount());
+    emit signal_stepped();
 
     update();
 }

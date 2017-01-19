@@ -18,6 +18,9 @@ class RRTWidget : public QQuickPaintedItem {
 public:
     RRTWidget();
 
+    Q_PROPERTY(int iterations READ iterations NOTIFY signal_stepped)
+    int iterations() const { return _biRRT->iterationCount(); }
+
 public slots:
     void run();
     void run_step();  // TODO: rename?
@@ -26,13 +29,13 @@ public slots:
     void clearObstacles();
     void step();
     void stepBig();
-    void setGoalBias(int bias);      //  bias is from 0 to 100
-    void setWaypointBias(int bias);  //  bias is from 0 to 100
+    void setGoalBias(float bias);      //  bias is from 0 to 1
+    void setWaypointBias(float bias);  //  bias is from 0 to 1
     void setASC(int checked);
     void setStepSize(double step);
 
 signals:
-    void signal_stepped(int iterationCount);
+    void signal_stepped();
 
 protected:
     void paint(QPainter* p) override;
@@ -46,6 +49,7 @@ protected:
 
     void _step(int numTimes);
 
+    // TODO: fix mouse handling
     // Qt::MouseButtons acceptedMouseButtons() const override {
     //     return Qt::LeftButton;
     // }
