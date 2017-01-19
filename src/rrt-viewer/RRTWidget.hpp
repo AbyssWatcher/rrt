@@ -21,6 +21,22 @@ public:
     Q_PROPERTY(int iterations READ iterations NOTIFY signal_stepped)
     int iterations() const { return _biRRT->iterationCount(); }
 
+    Q_PROPERTY(float stepSize READ stepSize WRITE setStepSize)
+    void setStepSize(float step);
+    float stepSize() const { return _biRRT->stepSize(); }
+
+    Q_PROPERTY(float goalBias READ goalBias WRITE setGoalBias)
+    void setGoalBias(float bias);  //  bias is from 0 to 1
+    float goalBias() const { return _biRRT->goalBias(); }
+
+    Q_PROPERTY(float waypointBias READ waypointBias WRITE setWaypointBias)
+    void setWaypointBias(float bias);  //  bias is from 0 to 1
+    float waypointBias() const { return _biRRT->waypointBias(); }
+
+    Q_PROPERTY(bool ascEnabled READ ascEnabled WRITE setASCEnabled)
+    void setASCEnabled(bool enabled);
+    float ascEnabled() const { return _biRRT->isASCEnabled(); }
+
 public slots:
     void run();
     void run_step();  // TODO: rename?
@@ -29,10 +45,6 @@ public slots:
     void clearObstacles();
     void step();
     void stepBig();
-    void setGoalBias(float bias);      //  bias is from 0 to 1
-    void setWaypointBias(float bias);  //  bias is from 0 to 1
-    void setASC(int checked);
-    void setStepSize(double step);
 
 signals:
     void signal_stepped();

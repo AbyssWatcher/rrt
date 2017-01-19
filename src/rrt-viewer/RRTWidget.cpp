@@ -72,13 +72,13 @@ void RRTWidget::setGoalBias(float bias) { _biRRT->setGoalBias(bias); }
 
 void RRTWidget::setWaypointBias(float bias) { _biRRT->setWaypointBias(bias); }
 
-void RRTWidget::setASC(int checked) { _biRRT->setASCEnabled(checked != 0); }
+void RRTWidget::setASCEnabled(bool enabled) { _biRRT->setASCEnabled(enabled); }
 
 void RRTWidget::step() { _step(1); }
 
 void RRTWidget::stepBig() { _step(100); }
 
-void RRTWidget::setStepSize(double step) { _biRRT->setStepSize(step); }
+void RRTWidget::setStepSize(float step) { _biRRT->setStepSize(step); }
 
 void RRTWidget::run() {
     if (!_runTimer) {

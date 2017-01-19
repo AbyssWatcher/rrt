@@ -63,6 +63,8 @@ ApplicationWindow {
                     id: goalBiasSlider
                     minimumValue: 0
                     maximumValue: 1.0
+                    stepSize: 0.05
+                    value: rrt.goalBias
                     // TODO: bind to rrt
                 }
             }
@@ -74,20 +76,23 @@ ApplicationWindow {
 
                 Slider {
                     id: waypointBiasSlider
+                    stepSize: 0.05
                     minimumValue: 0
                     maximumValue: 1.0
+                    value: rrt.waypointBias
                     // TODO: bind to rrt
                 }
             }
 
             ColumnLayout {
                 Label {
-                    text: "Step Size: " + stepSize.value
+                    text: "Step Size: "
                 }
 
                 SpinBox {
                     id: stepSize
                     decimals: 2
+                    value: rrt.stepSize
                     // TODO: bind value
                 }
             }
@@ -95,8 +100,8 @@ ApplicationWindow {
 
         RRTWidget {
             id: rrt
-            width: 200
-            height: 200
+            width: 800
+            height: 600
         }
     }
 
