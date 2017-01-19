@@ -85,7 +85,7 @@ set(ui_SRC
 )
 
 add_executable("rrt-viewer" ${ui_SRC})
-QT5_USE_MODULES("rrt-viewer" Widgets)
+QT5_USE_MODULES("rrt-viewer" Widgets Qml Quick)
 target_link_libraries("rrt-viewer" RRT)
 
 
